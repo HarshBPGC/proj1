@@ -1,43 +1,75 @@
 # Resume to Website Generator
 
-This tool allows you to input your resume information and generate a personal website from it. It provides a user-friendly form interface to collect all the necessary information and then generates a modern, responsive website.
+A Flask-based web application that converts resume information into a beautiful personal website. Built with Flask, NiceGUI, and Bootstrap.
 
 ## Features
 
-- Input form for personal information, education, experience, skills, and projects
-- Modern, responsive design using Tailwind CSS
-- Type-safe development with TypeScript
-- Easy to use interface with dynamic form fields
+- Interactive form for entering resume information
+- Support for personal information, education, work experience, skills, and projects
+- Real-time preview of the generated website
+- Responsive design that works on all devices
+- Modern and professional look
 
-## Getting Started
+## Prerequisites
 
-1. Install dependencies:
+- Python 3.8 or higher
+- pip (Python package installer)
+
+## Installation
+
+1. Clone the repository:
 ```bash
-npm install
+git clone https://github.com/yourusername/resume-website-generator.git
+cd resume-website-generator
 ```
 
-2. Run the development server:
+2. Create a virtual environment (recommended):
 ```bash
-npm run dev
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser to start using the application.
+3. Install the required packages:
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
-1. Fill out the form with your resume information
-2. Add as many education entries, work experiences, skills, and projects as needed
-3. Click "Generate Website" to create your personal website
-4. The generated website will be available for preview and can be deployed to your preferred hosting platform
+1. Start the development server:
+```bash
+python app.py
+```
 
-## Technology Stack
+2. Open your web browser and navigate to:
+```
+http://localhost:3000
+```
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- React Hook Form
+3. Fill out the form with your resume information
+4. Click "Generate Website" to create your personal website
+5. Preview your website and make any necessary adjustments
+
+## Project Structure
+
+```
+resume-website-generator/
+├── app.py              # Main Flask application
+├── requirements.txt    # Python dependencies
+├── templates/         # HTML templates
+│   ├── index.html    # Main form page
+│   └── preview.html  # Generated website template
+└── README.md         # This file
+```
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests! 
+1. Fork the repository
+2. Create a new branch for your feature
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 

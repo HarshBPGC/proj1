@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume to Website Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nicegui@1.4.21/dist/nicegui.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Resume to Website Generator</h1>
+        
+        <div id="resume-form">
+            <!-- Personal Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>Personal Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Professional Summary</label>
+                        <textarea class="form-control" id="summary" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Education</h3>
+                    <button class="btn btn-primary" onclick="addEducation()">Add Education</button>
+                </div>
+                <div class="card-body" id="education-list">
+                    <!-- Education entries will be added here -->
+                </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Work Experience</h3>
+                    <button class="btn btn-primary" onclick="addExperience()">Add Experience</button>
+                </div>
+                <div class="card-body" id="experience-list">
+                    <!-- Experience entries will be added here -->
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Skills</h3>
+                    <button class="btn btn-primary" onclick="addSkill()">Add Skill</button>
+                </div>
+                <div class="card-body" id="skills-list">
+                    <!-- Skills will be added here -->
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Projects</h3>
+                    <button class="btn btn-primary" onclick="addProject()">Add Project</button>
+                </div>
+                <div class="card-body" id="projects-list">
+                    <!-- Projects will be added here -->
+                </div>
+            </div>
+
+            <div class="text-center mb-5">
+                <button class="btn btn-success btn-lg" onclick="generateWebsite()">Generate Website</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize NiceGUI
+        const ui = new NiceGUI();
+
+        // Form data
+        let formData = {
+            personal_info: {
+                name: '',
+                email: '',
+                phone: '',
+                location: '',
+                summary: ''
+            },
+            education: [],
+            experience: [],
+            skills: [],
+            projects: []
+        };
+
+        // Add form handlers
+        document.getElementById('name').addEventListener('change', (e) => {
+            formData.personal_info.name = e.target.value;
+        });
+
+        document.getElementById('email').addEventListener('change', (e) => {
+            formData.personal_info.email = e.target.value;
+        });
+
+        document.getElementById('phone').addEventListener('change', (e) => {
+            formData.personal_info.phone = e.target.value;
+        });
+
+        document.getElementById('location').addEventListener('change', (e) => {
+            formData.personal_info.location = e.target.value;
+        });
+
+        document.getElementById('summary').addEventListener('change', (e) => {
+            formData.personal_info.summary = e.target.value;
+        });
+
+        // Add section handlers
+        function addEducation() {
+            const education = {
+                institution: '',
+                degree: '',
+                field: '',
+                start_date: '',
+                end_date: '',
+                gpa: ''
+            };
+            formData.education.push(education);
+            updateEducationList();
+        }
+
+        function addExperience() {
+            const experience = {
+                company: '',
+                position: '',
+                start_date: '',
+                end_date: '',
+                description: ''
+            };
+            formData.experience.push(experience);
+            updateExperienceList();
+        }
+
+        function addSkill() {
+            const skill = {
+                name: '',
+                level: ''
+            };
+            formData.skills.push(skill);
+            updateSkillsList();
+        }
+
+        function addProject() {
+            const project = {
+                name: '',
+                description: '',
+                technologies: '',
+                url: ''
+            };
+            formData.projects.push(project);
+            updateProjectsList();
+        }
+
+        // Update section lists
+        function updateEducationList() {
+            const container = document.getElementById('education-list');
+            container.innerHTML = formData.education.map((edu, index) => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Institution</label>
+                                <input type="text" class="form-control" value="${edu.institution}" 
+                                    onchange="updateEducation(${index}, 'institution', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Degree</label>
+                                <input type="text" class="form-control" value="${edu.degree}"
+                                    onchange="updateEducation(${index}, 'degree', this.value)">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Field of Study</label>
+                                <input type="text" class="form-control" value="${edu.field}"
+                                    onchange="updateEducation(${index}, 'field', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">GPA</label>
+                                <input type="text" class="form-control" value="${edu.gpa}"
+                                    onchange="updateEducation(${index}, 'gpa', this.value)">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" class="form-control" value="${edu.start_date}"
+                                    onchange="updateEducation(${index}, 'start_date', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">End Date</label>
+                                <input type="date" class="form-control" value="${edu.end_date}"
+                                    onchange="updateEducation(${index}, 'end_date', this.value)">
+                            </div>
+                        </div>
+                        <button class="btn btn-danger" onclick="removeEducation(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateExperienceList() {
+            const container = document.getElementById('experience-list');
+            container.innerHTML = formData.experience.map((exp, index) => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Company</label>
+                                <input type="text" class="form-control" value="${exp.company}"
+                                    onchange="updateExperience(${index}, 'company', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Position</label>
+                                <input type="text" class="form-control" value="${exp.position}"
+                                    onchange="updateExperience(${index}, 'position', this.value)">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" class="form-control" value="${exp.start_date}"
+                                    onchange="updateExperience(${index}, 'start_date', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">End Date</label>
+                                <input type="date" class="form-control" value="${exp.end_date}"
+                                    onchange="updateExperience(${index}, 'end_date', this.value)">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3"
+                                onchange="updateExperience(${index}, 'description', this.value)">${exp.description}</textarea>
+                        </div>
+                        <button class="btn btn-danger" onclick="removeExperience(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSkillsList() {
+            const container = document.getElementById('skills-list');
+            container.innerHTML = formData.skills.map((skill, index) => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Skill Name</label>
+                                <input type="text" class="form-control" value="${skill.name}"
+                                    onchange="updateSkill(${index}, 'name', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Level</label>
+                                <select class="form-select" onchange="updateSkill(${index}, 'level', this.value)">
+                                    <option value="Beginner" ${skill.level === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                                    <option value="Intermediate" ${skill.level === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+                                    <option value="Advanced" ${skill.level === 'Advanced' ? 'selected' : ''}>Advanced</option>
+                                    <option value="Expert" ${skill.level === 'Expert' ? 'selected' : ''}>Expert</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-danger" onclick="removeSkill(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateProjectsList() {
+            const container = document.getElementById('projects-list');
+            container.innerHTML = formData.projects.map((project, index) => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Project Name</label>
+                                <input type="text" class="form-control" value="${project.name}"
+                                    onchange="updateProject(${index}, 'name', this.value)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Technologies</label>
+                                <input type="text" class="form-control" value="${project.technologies}"
+                                    onchange="updateProject(${index}, 'technologies', this.value)">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3"
+                                onchange="updateProject(${index}, 'description', this.value)">${project.description}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Project URL</label>
+                            <input type="url" class="form-control" value="${project.url}"
+                                onchange="updateProject(${index}, 'url', this.value)">
+                        </div>
+                        <button class="btn btn-danger" onclick="removeProject(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update handlers
+        function updateEducation(index, field, value) {
+            formData.education[index][field] = value;
+        }
+
+        function updateExperience(index, field, value) {
+            formData.experience[index][field] = value;
+        }
+
+        function updateSkill(index, field, value) {
+            formData.skills[index][field] = value;
+        }
+
+        function updateProject(index, field, value) {
+            formData.projects[index][field] = value;
+        }
+
+        // Remove handlers
+        function removeEducation(index) {
+            formData.education.splice(index, 1);
+            updateEducationList();
+        }
+
+        function removeExperience(index) {
+            formData.experience.splice(index, 1);
+            updateExperienceList();
+        }
+
+        function removeSkill(index) {
+            formData.skills.splice(index, 1);
+            updateSkillsList();
+        }
+
+        function removeProject(index) {
+            formData.projects.splice(index, 1);
+            updateProjectsList();
+        }
+
+        // Generate website
+        async function generateWebsite() {
+            try {
+                const response = await fetch('/api/save_resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        window.location.href = '/preview';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while generating the website.');
+            }
+        }
+    </script>
+</body>
+</html> 
